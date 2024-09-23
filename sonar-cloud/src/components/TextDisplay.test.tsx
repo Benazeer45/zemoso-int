@@ -2,10 +2,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import TextDisplay from "./TextDisplay";
 
-test("renders the TextDisplay component with the correct text", () => {
-  const sampleText = "Hello, World!";
-  render(<TextDisplay text={sampleText} />);
-  
-  const textElement = screen.getByText(sampleText);
-  expect(textElement).toBeInTheDocument();
+test("renders the TextDisplay component with given text", () => {
+  const testText = "Hello, World!";
+  render(<TextDisplay text={testText} />); // Render the component with the test text
+
+  const textElement = screen.getByText(testText); // Check for the presence of the text
+  expect(textElement).toBeInTheDocument(); // This will cover the return line
 });
