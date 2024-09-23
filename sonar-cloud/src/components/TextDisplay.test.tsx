@@ -7,5 +7,5 @@ test("renders the TextDisplay component with given text", () => {
   render(<TextDisplay text={testText} />); // Render the component with the test text
 
   const textElement = screen.getByText(testText); // Check for the presence of the text
-  expect(textElement).toBeInTheDocument(); // This will cover the return line
+  expect(textElement).toBeInTheDocument(); // Assert that the text is in the document
 });
