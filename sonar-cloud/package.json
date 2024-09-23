@@ -9,17 +9,20 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.108",
     "@types/react-dom": "^18.3.0",
+    "jest-raw-loader": "^1.0.1",
+    "jest-transform-stub": "^2.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "ts-jest": "^29.2.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "node --expose-gc --max-old-space-size=4096 ./node_modules/jest-cli/bin/jest.js  --config jest.config.js --coverage --runInBand --logHeapUsage --detectOpenHandles --forceExit"
   },
   "eslintConfig": {
     "extends": [
