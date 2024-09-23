@@ -6,15 +6,12 @@ on:
       - main
       - branch-* # Matches all branches starting with 'branch-'
   pull_request:
-    types: [opened, synchronize, reopened] # Removed 'closed' to avoid redundant PR checks
+    types: [opened, synchronize, reopened]
 
 jobs:
   sonarcloud:
     name: SonarCloud PR Analysis
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./sonar-cloud # Ensure this directory is correct
     steps:
       - uses: actions/checkout@v2
         with:
@@ -26,7 +23,7 @@ jobs:
           node-version: '16' # Ensure you're using a supported Node.js version
 
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps # Runs in the root directory
 
       - name: Run Tests
         run: npm test -- --coverage # Run tests with coverage, necessary for SonarCloud
@@ -35,12 +32,12 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.projectKey=your_project_key
-            -Dsonar.organization=your_organization
+            -Dsonar.projectKey=Benazeer45_zemoso-int
+            -Dsonar.organization=benazeer45
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
             -Dsonar.pullrequest.branch=${{ github.head_ref }}
             -Dsonar.pullrequest.base=${{ github.base_ref }}
-            -Dsonar.sources=src # Ensure correct path to your source files
+            -Dsonar.sources=./src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub token to fetch PR details
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # SonarCloud token for authentication
@@ -69,8 +66,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.projectKey=your_project_key
-            -Dsonar.organization=your_organization
+            -Dsonar.projectKey=Benazeer45_zemoso-int
+            -Dsonar.organization=benazeer45
             -Dsonar.branch.name=main # Change branch to main after PR is merged
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
