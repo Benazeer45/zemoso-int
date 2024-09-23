@@ -1,48 +1,58 @@
-// src/components/Button.test.tsx
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // For extended matchers
-import Button from './Button';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Button from "./Button";
 
-describe('Button Component', () => {
-  it('renders with the correct label', () => {
-    // Arrange
-    const label = 'Click me';
-    const mockOnClick = jest.fn(); // Mock the onClick function
+test("renders the Button component", () => {
+  render(<Button>Click Me</Button>);
+  const buttonElement = screen.getByText(/click me/i);
+  expect(buttonElement).toBeInTheDocument();
+});
 
-    // Act
-    render(<Button label={label} onClick={mockOnClick} />);
+test("Button is clickable", async () => {
+  const handleClick = jest.fn(); // Mock function to track clicks
+  render(<Button onClick={handleClick}>Click Me</Button>);
 
-    // Assert
-    const buttonElement = screen.getByRole('button', { name: /click me/i });
-    expect(buttonElement).toBeInTheDocument();
-  });
+  const buttonElement = screen.getByText(/click me/i);
+  
+  // Simulate a click event using userEvent
+  await userEvent.click(buttonElement);
 
-  it('calls the onClick handler when clicked', () => {
-    // Arrange
-    const label = 'Submit';
-    const mockOnClick = jest.fn();
+  // Check if the click handler was called once
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
 
-    // Act
-    render(<Button label={label} onClick={mockOnClick} />);
-    const buttonElement = screen.getByRole('button', { name: /submit/i });
-    fireEvent.click(buttonElement);
+test("Button is disabled when disabled prop is passed", () => {
+  render(<Button disabled>Click Me</Button>);
 
-    // Assert
-    expect(mockOnClick).toHaveBeenCalledTimes(1); // Check that the click handler was called exactly once
-  });
+  const buttonElement = screen.getByText(/click me/i);
 
-  it('renders with different label texts', () => {
-    const labels = ['Submit', 'Cancel', 'Reset'];
-    const mockOnClick = jest.fn();
+  // Check if the button is disabled
+  expect(buttonElement).toBeDisabled();
+});
 
-    labels.forEach((label) => {
-      // Act
-      render(<Button label={label} onClick={mockOnClick} />);
-      const buttonElement = screen.getByRole('button', { name: label });
-      
-      // Assert
-      expect(buttonElement).toBeInTheDocument();
-    });
-  });
+test("Button renders with different variants and colors", () => {
+  const { rerender } = render(
+    <Button variant="contained" color="primary">
+      Contained Primary
+    </Button>
+  );
+
+  // Check if the button with the specific variant and color is in the document
+  const buttonElement = screen.getByText(/contained primary/i);
+  expect(buttonElement).toBeInTheDocument();
+  expect(buttonElement).toHaveClass("MuiButton-contained");
+  expect(buttonElement).toHaveClass("MuiButton-colorPrimary");
+
+  // Rerender with a different variant and color
+  rerender(
+    <Button variant="outlined" color="secondary">
+      Outlined Secondary
+    </Button>
+  );
+
+  const newButtonElement = screen.getByText(/outlined secondary/i);
+  expect(newButtonElement).toBeInTheDocument();
+  expect(newButtonElement).toHaveClass("MuiButton-outlined");
+  expect(newButtonElement).toHaveClass("MuiButton-colorSecondary");
 });

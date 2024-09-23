@@ -1,17 +1,8 @@
-// src/components/Button.tsx
-import React from 'react';
+import React from "react";
+import { Button as MuiButton, ButtonProps } from "@mui/material";
 
-type ButtonProps = {
-  label: string;
-  onClick: () => void;
-};
-
-const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
-  return (
-    <button onClick={onClick}>
-      {label}
-    </button>
-  );
+const Button: React.FC<ButtonProps> = (props) => {
+  return <MuiButton {...props} />;
 };
 
 export default Button;
