@@ -1,74 +1,30 @@
-name: Build and SonarCloud Analysis
-
+name: Build
 on:
-  push:
-    branches:
-      - main
-      - branch-* # Matches all branches starting with 'branch-'
-  pull_request:
-    types: [opened, synchronize, reopened]
-
+ push:
+   branches:
+     - main
+ pull_request:
+   types: [opened, synchronize, reopened, closed]
 jobs:
-  sonarcloud:
-    name: SonarCloud PR Analysis
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Full clone to avoid shallow clone issues with Sonar
-          
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16' # Ensure you're using a supported Node.js version
-
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps # Runs in the root directory
-
-      - name: Run Tests
-        run: npm test -- --coverage # Run tests with coverage, necessary for SonarCloud
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=Benazeer45_zemoso-int
-            -Dsonar.organization=benazeer45
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
-            -Dsonar.sources=./src
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub token to fetch PR details
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # SonarCloud token for authentication
-
-  merge-analysis:
-    name: SonarCloud Analysis on PR Merge
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Run Tests
-        run: npm test -- --coverage
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=Benazeer45_zemoso-int
-            -Dsonar.organization=benazeer45
-            -Dsonar.branch.name=main # Change branch to main after PR is merged
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+ sonarcloud:
+   if: startsWith(github.head_ref, 'FE_') && github.event.pull_request.merged == false
+   name: SonarCloud
+   runs-on: ubuntu-latest
+   defaults:
+     run:
+       working-directory: ./demo/sonar-cloud
+   steps:
+     - uses: actions/checkout@v2
+       with:
+         fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+     - name: Install Dependencies
+       run: npm install --legacy-peer-deps
+     - name: Test and coverage
+       run: npm run test
+     - name: SonarCloud Scan
+       with:
+         projectBaseDir: ./myap
+       uses: SonarSource/sonarcloud-github-action@master
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
