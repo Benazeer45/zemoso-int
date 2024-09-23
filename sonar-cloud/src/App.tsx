@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TextDisplay from './components/TextDisplay'; // Ensure the import path is correct
+import TextDisplay from './components/atoms/Typography'; 
 
 function App() {
   return (
