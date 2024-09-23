@@ -9,7 +9,7 @@ on:
 
 jobs:
   sonarcloud:
-    if: startsWith(github.head_ref, 'FE_') && github.event.pull_request.merged == false
+    if: startsWith(github.head_ref, 'FE_')
     name: SonarCloud
     runs-on: ubuntu-latest
     defaults:
