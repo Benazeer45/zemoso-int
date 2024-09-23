@@ -1,8 +1,8 @@
-import React from "react";
-import { Button as MuiButton, ButtonProps } from "@mui/material";
+// import React from "react";
+// import { Button as MuiButton, ButtonProps } from "@mui/material";
 
-const Button: React.FC<ButtonProps> = (props) => {
-  return <MuiButton {...props} />;
-};
+// const Button: React.FC<ButtonProps> = (props) => {
+//   return <MuiButton {...props} />;
+// };
 
-export default Button;
+// export default Button;
