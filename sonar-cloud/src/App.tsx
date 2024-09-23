@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <h1>Hello, SonarCloud!</h1>
-      <TextDisplay text="This is a simple text display component." />
+      <TextDisplay text="This is a simple text display component text." />
     </div>
   );
 }
