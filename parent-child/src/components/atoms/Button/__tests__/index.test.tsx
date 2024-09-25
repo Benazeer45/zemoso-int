@@ -19,7 +19,6 @@ describe('Button Component', () => {
     const buttonElement = screen.getByRole('button', { name: /click me/i });
     expect(buttonElement).toBeDisabled();
       });
-
   it('calls onClick handler when clicked', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click Me</Button>);
