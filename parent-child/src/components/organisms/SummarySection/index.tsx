@@ -60,7 +60,9 @@ export const SummarySection: React.FC = () => {
   return (
     <Box>
       <Box display="flex" alignItems="center" gap="8px" mb={2}>
-        <TextWithIcon text="Summary" iconSrc="/assets/icons/icon.svg" />
+        <TextWithIcon text="Summary" iconSrc="/assets/icons/icon.svg" onClick={function (): void {
+          throw new Error('Function not implemented.');
+        } } />
       </Box>
       
       <Box mb={2} display="flex" justifyContent="space-between">
@@ -85,7 +87,7 @@ export const SummarySection: React.FC = () => {
       <CustomizedSlider
         value={sliderValue} // Pass slider value to the component
         onChange={handleSliderChange} // Handle slider change
-      />
+        max={0}      />
       
       <Box mb={2} display="flex" alignItems="center">
         <Typography variant="body2" color="#A5A5A6">
