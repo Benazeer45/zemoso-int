@@ -22,52 +22,43 @@ jobs:
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-
-      - name: Compile TypeScript
-        run: npm run build # Make sure your project has a build script to compile TypeScript
-
-      - name: Run Tests and Generate Coverage
-        run: npm test -- --coverage # Ensure your test runner generates coverage reports in LCOV format
+      - name: Run Tests
+        run: npm test
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: ./parent-child # Specify the correct directory
+          projectBaseDir: ./sonar-cloud # Specify the correct directory
           args: >
             -Dsonar.branch.name=${{ github.head_ref }}
-            -Dsonar.typescript.lcov.reportPaths=./parent-child/coverage/lcov.info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # SonarCloud token for authentication
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   branchAnalysis:
     if: github.event.pull_request.merged == true
     name: Branch Analysis on PR merge
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./parent-child
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for better analysis relevance
 
+      - name: Change directory to sonar-cloud
+        run: cd sonar-cloud # Change to the myap directory
+
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Compile TypeScript
-        run: npm run build # Make sure your project has a build script to compile TypeScript
-
-      - name: Run Tests and Generate Coverage
-        run: npm test -- --coverage # Ensure your test runner generates coverage reports in LCOV format
+      - name: Run Tests
+        run: npm test
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: ./parent-child # Specify the correct directory
+          projectBaseDir: ./sonar-cloud # Specify the correct directory
           args: >
             -Dsonar.branch.name=main
-            -Dsonar.typescript.lcov.reportPaths=./parent-child/coverage/lcov.info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # SonarCloud token for authentication
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN}}
