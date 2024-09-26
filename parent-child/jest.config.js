@@ -44,7 +44,7 @@ module.exports = {
     testEnvironment: 'jest-environment-jsdom',
   
     // Setup file for initializing tests, uncomment if needed
-    setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
+    //setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   
     // Optional: collect coverage information
     collectCoverage: true,
